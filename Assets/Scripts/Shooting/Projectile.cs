@@ -66,7 +66,7 @@ public class Projectile : MonoBehaviour
         {
             // TEMP
             hitObject = true;
-            //Destroy(gameObject);
+            Destroy(gameObject);
             return;
         }
 
@@ -91,7 +91,7 @@ public class Projectile : MonoBehaviour
             GameObject bulletHole = Instantiate(BulletHolePrefab);
             bulletHole.transform.position = hitInfo.point + hitInfo.normal * 0.01f;
             bulletHole.transform.LookAt(hitInfo.point + hitInfo.normal);
-
+            Destroy(bulletHole, 30f);
             if (LogPath)
             {
                 pathPoints.Add(transform.position);

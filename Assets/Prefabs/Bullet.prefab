@@ -194,7 +194,7 @@ MonoBehaviour:
     type: 2}
   GravityScale: 0.5
   ExternalForces: []
-  TrailStartTime: 0.2
+  TrailStartTime: 0.05
   CollisionMask:
     serializedVersion: 2
     m_Bits: 1
