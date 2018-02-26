@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
 
     public float GravityScale = 1f;
     public List<Vector3> ExternalForces = new List<Vector3>();
+    public float TrailStartTime;
 
     public LayerMask CollisionMask;
 
@@ -20,7 +21,11 @@ public class Projectile : MonoBehaviour
 
     [SerializeField]
     [ReadOnly]
-    private Vector3 Velocity;
+    private Vector3 ExternalVelocity;
+    [SerializeField]
+    [ReadOnly]
+    private Vector3 InternalVelocity;
+    private float timer;
 
     public void Start()
     {
@@ -29,9 +34,6 @@ public class Projectile : MonoBehaviour
         {
             pathPoints.Add(transform.position);
         }
-
-        // Add initial velocity.
-        Velocity = transform.forward * Speed;
     }
 
     public void Update()
@@ -39,15 +41,26 @@ public class Projectile : MonoBehaviour
         if (hitObject)
             return;
 
-        Velocity += Physics.gravity * GravityScale * Time.deltaTime;
+        if(timer > -1f)
+            timer += Time.deltaTime;
+        if(timer > TrailStartTime)
+        {
+            GetComponent<TrailRenderer>().enabled = true;
+            timer = -1f;
+        }
+
+        ExternalVelocity += Physics.gravity * GravityScale * Time.deltaTime;
 
         for (int i = 0; i < ExternalForces.Count; i++)
         {
-            Velocity += ExternalForces[i] * Time.deltaTime;
+            ExternalVelocity += ExternalForces[i] * Time.deltaTime;
         }
 
+        InternalVelocity = transform.forward * Speed;
+
         Vector3 oldPos = transform.position;
-        Vector3 newPos = transform.position + Velocity * Time.deltaTime;
+        Vector3 newPos = transform.position + (ExternalVelocity * Time.deltaTime) + (InternalVelocity * Time.deltaTime);
+        transform.LookAt(newPos);
 
         if (RespondToCollision(oldPos, newPos))
         {

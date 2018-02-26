@@ -7,6 +7,9 @@ public class CameraRecoil : MonoBehaviour
     public Transform Horizontal;
     public Transform Vertical;
 
+    public Vector2 XRange;
+    public Vector2 YRange;
+
     public float OffX;
     public float OffY;
 
@@ -14,8 +17,8 @@ public class CameraRecoil : MonoBehaviour
 
     public void Shoot()
     {
-        OffX -= Random.Range(-2f, 2f);
-        OffY -= Random.Range(1, 3);
+        OffX -= Random.Range(XRange.x, XRange.y);
+        OffY -= Random.Range(YRange.x, YRange.y);
     }
 
     public void Update()
